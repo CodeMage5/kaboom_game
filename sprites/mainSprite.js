@@ -15,7 +15,7 @@ export default class mainSprite {
     this.#isDead = false;
     this.mainSprite = add([
       sprite("walk-down", { animSpeed: this.ANIM_SPEED }),
-      pos(120, 80),
+      pos(window.innerWidth / 2 - 10, window.innerHeight / 2 - 15),
       area({
         shape: new Polygon([
           vec2(0, 0),
