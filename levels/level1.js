@@ -37,7 +37,7 @@ export default class Level1 {
             anchor("center"),
             body({ isStatic: true }),
             scale(24 / 7, 1),
-            area({ shape: new Rect(vec2(0), 24, 7) }),
+            area(),
           ],
         },
         pos: vec2(

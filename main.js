@@ -11,6 +11,7 @@ let LEVEL = 1;
 
 // World Setting
 kaboom();
+//debug.inspect = true;
 
 // Scenes
 scene("level1", () => {
@@ -18,7 +19,12 @@ scene("level1", () => {
   const mainCharacter = new mainSprite();
   let enemies = [];
   enemies.push(
-    new Enemy(window.innerWidth / 2 - 200, window.innerHeight / 2 - 15)
+    new Enemy(
+      window.innerWidth / 2 - 200,
+      window.innerHeight / 2 - 15,
+      null,
+      mainCharacter.mainSprite
+    )
   );
 
   setBackground(Color.fromHex("#5ba675"));
@@ -26,6 +32,7 @@ scene("level1", () => {
     text(`Health: ${mainCharacter.mainSprite.hp()}`),
     pos(24, 24),
   ]);
+  add([text(`Level: ${LEVEL}`), pos(400, 24)]);
 
   // Interactions
   mainCharacter.mainSprite.onBeforePhysicsResolve((col) => {
@@ -34,36 +41,22 @@ scene("level1", () => {
     });
     if (filtered.length >= 1) return;
     // Collisions with wall
-    if (!mainCharacter.isAttacking()) {
-      if (col.isTop() === "up") mainCharacter.mainSprite.moveBy(0, 10);
-      else if (col.isBottom() === "down")
-        mainCharacter.mainSprite.moveBy(0, -10);
-      else if (col.isLeft()) {
-        mainCharacter.mainSprite.moveBy(10, 0);
-      } else if (col.isRight()) mainCharacter.mainSprite.moveBy(-10, 0);
-    } else {
-      if (mainCharacter.isFacing === "up")
-        mainCharacter.mainSprite.moveBy(0, 10);
-      else if (mainCharacter.isFacing === "down")
-        mainCharacter.mainSprite.moveBy(0, -10);
-      else if (mainCharacter.isFacing === "left") {
-        mainCharacter.mainSprite.moveBy(10, 0);
-      } else if (mainCharacter.isFacing === "right")
-        mainCharacter.mainSprite.moveBy(-10, 0);
-    }
-
-    // if (mainCharacter.isFacing === "up" && mainCharacter.isAttacking())
-    //   mainCharacter.mainSprite.moveBy(0, 10);
-    // else if (mainCharacter.isFacing === "down" && mainCharacter.isAttacking())
-    //   mainCharacter.mainSprite.moveBy(0, -10);
-    // else if (mainCharacter.isFacing === "left" && mainCharacter.isAttacking()) {
-    //   console.log("Teleport!");
-    //   mainCharacter.mainSprite.moveBy(10, 0);
-    // } else if (
-    //   mainCharacter.isFacing === "right" &&
-    //   mainCharacter.isAttacking()
-    // )
-    //   mainCharacter.mainSprite.moveBy(-10, 0);
+    // if (!mainCharacter.isAttacking()) {
+    //   if (col.isTop() === "up") mainCharacter.mainSprite.moveBy(0, 10);
+    //   else if (col.isBottom() === "down")
+    //     mainCharacter.mainSprite.moveBy(0, -10);
+    //   else if (col.isLeft()) {
+    //     mainCharacter.mainSprite.moveBy(10, 0);
+    //   } else if (col.isRight()) mainCharacter.mainSprite.moveBy(-10, 0);
+    // } else {
+    //   if (mainCharacter.isFacing === "up") mainCharacter.mainSprite.move(0, 10);
+    //   else if (mainCharacter.isFacing === "down")
+    //     mainCharacter.mainSprite.move(0, -10);
+    //   else if (mainCharacter.isFacing === "left") {
+    //     mainCharacter.mainSprite.move(10, 0);
+    //   } else if (mainCharacter.isFacing === "right")
+    //     mainCharacter.mainSprite.move(-10, 0);
+    // }
   });
 
   // Collisions with enemy
@@ -105,10 +98,20 @@ scene("level2", () => {
   const mainCharacter = new mainSprite();
   let enemies = [];
   enemies.push(
-    new Enemy(window.innerWidth / 2 - 200, window.innerHeight / 2 - 15)
+    new Enemy(
+      window.innerWidth / 2 - 200,
+      window.innerHeight / 2 - 15,
+      null,
+      mainCharacter.mainSprite
+    )
   );
   enemies.push(
-    new Enemy(window.innerWidth / 2 - 300, window.innerHeight / 2 - 15)
+    new Enemy(
+      window.innerWidth / 2 + 200,
+      window.innerHeight / 2 - 15,
+      null,
+      mainCharacter.mainSprite
+    )
   );
 
   setBackground(Color.fromHex("#5ba675"));
@@ -116,6 +119,7 @@ scene("level2", () => {
     text(`Health: ${mainCharacter.mainSprite.hp()}`),
     pos(24, 24),
   ]);
+  add([text(`Level: ${LEVEL}`), pos(400, 24)]);
 
   // Interactions
   mainCharacter.mainSprite.onBeforePhysicsResolve((col) => {
@@ -204,7 +208,7 @@ scene("youWin", () => {
     text(
       `You beat level ${LEVEL}! Press space to continue to level ${LEVEL++}`
     ),
-    pos(24, 24),
+    pos(48, 24),
   ]);
   onKeyPress("space", () => {
     go(`level${LEVEL}`);

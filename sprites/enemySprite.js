@@ -3,35 +3,64 @@ export default class Enemy {
   #SPEED;
   #ANIM_SPEED;
 
-  constructor(xPos, yPos) {
+  constructor(xPos, yPos, walkPath, followObj) {
     this.#isFacing = "down";
-    this.#SPEED = 150;
+    this.#SPEED = 2;
     this.#ANIM_SPEED = 20;
     this.#loadAssets();
-    this.#initMovement();
     this.enemySprite = add([
       sprite("cultist-walk-down", { animSpeed: this.#ANIM_SPEED }),
       pos(xPos, yPos),
       area({
         shape: new Polygon([
-          vec2(0, 0),
-          vec2(20, 0),
-          vec2(20, 30),
-          vec2(0, 30),
+          vec2(15, 10),
+          vec2(35, 10),
+          vec2(35, 40),
+          vec2(15, 40),
         ]),
       }),
-      anchor("center"),
       body(),
       scale(2),
       health(3),
     ]);
+    this.#initMovement(walkPath, followObj);
   }
 
   get isFacing() {
     return this.#isFacing;
   }
 
-  #initMovement() {}
+  #initMovement(walkPath, followObj) {
+    this.enemySprite.onUpdate(() => {
+      if (followObj) {
+        if (
+          followObj.pos.x > this.enemySprite.pos.x &&
+          Math.abs(followObj.pos.x - this.enemySprite.pos.x) > 3
+        ) {
+          this.enemySprite.moveBy(vec2(this.#SPEED, 0));
+        } else if (
+          followObj.pos.x < this.enemySprite.pos.x &&
+          Math.abs(followObj.pos.x - this.enemySprite.pos.x) > 3
+        ) {
+          this.enemySprite.moveBy(vec2(-1 * this.#SPEED, 0));
+        }
+        if (
+          followObj.pos.y > this.enemySprite.pos.y &&
+          Math.abs(followObj.pos.y - this.enemySprite.pos.y) > 3
+        ) {
+          this.enemySprite.moveBy(vec2(0, this.#SPEED));
+        } else if (
+          followObj.pos.y < this.enemySprite.pos.y &&
+          Math.abs(followObj.pos.y - this.enemySprite.pos.y) > 3
+        ) {
+          this.enemySprite.moveBy(vec2(0, -1 * this.#SPEED));
+        }
+      }
+
+      if (walkPath) {
+      }
+    });
+  }
 
   takeDamage(collision) {
     if (collision.isTop()) {
